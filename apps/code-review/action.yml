@@ -1,0 +1,31 @@
+name: 'TV Code Review'
+description: 'AI-powered code review using Claude API with TV approval message'
+author: 'TV Team'
+
+inputs:
+  claude-api-key:
+    description: 'Claude API key for authentication'
+    required: true
+  model:
+    description: 'Claude model to use for code review'
+    required: false
+    default: 'claude-3-5-sonnet-20241022'
+  system-prompt:
+    description: '(Optional) Custom system prompt for code review'
+    required: false
+
+outputs:
+  approved:
+    description: 'Whether the pull request was approved'
+  issues_count:
+    description: 'Number of issues found'
+  summary:
+    description: 'Summary of the code review'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'check-circle'
+  color: 'green'

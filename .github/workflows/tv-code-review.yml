@@ -1,0 +1,68 @@
+name: TV Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'Claude model to use for code review'
+        required: false
+        default: 'claude-3-5-sonnet-20241022'
+        type: choice
+        options:
+          - 'claude-3-5-sonnet-20241022'
+          - 'claude-3-5-haiku-20241022'
+          - 'claude-3-opus-20240229'
+      system-prompt:
+        description: 'Custom system prompt for code review (optional)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  code-review:
+    name: TV Code Review
+    runs-on: ubuntu-latest
+    
+    # Only run on pull request events or comments containing "What TV?"
+    if: |
+      github.event_name == 'pull_request' || 
+      github.event_name == 'pull_request_target' || 
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, 'What TV?'))
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # For pull_request_target, we need to checkout the PR head
+          ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build code review package
+        run: npm run build --workspace=@what-tv/code-review
+        
+      - name: Run TV Code Review
+        uses: ./packages/code-review
+        with:
+          claude-api-key: ${{ secrets.WHAT_TV_CLAUDE_API_KEY }}
+          model: ${{ inputs.model || 'claude-3-5-sonnet-20241022' }}
+          system-prompt: ${{ inputs.system-prompt || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

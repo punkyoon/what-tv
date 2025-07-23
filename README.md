@@ -1,135 +1,173 @@
-# Turborepo starter
+# What TV? - AI Code Review System
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modern TypeScript project built with Turborepo that provides AI-powered code reviews using Claude API. The system automatically reviews pull requests and provides approval with the signature "TV" message.
 
-## Using this example
+## Features
 
-Run the following command:
+- 🤖 **AI-Powered Code Review**: Uses Claude API for intelligent code analysis
+- 🔄 **Automatic PR Review**: Triggers on pull request events
+- 💬 **Manual Trigger**: Comment "What TV?" on any PR to trigger a review
+- ⚙️ **Configurable**: Customizable Claude model and system prompts
+- 📝 **Detailed Feedback**: Provides structured feedback with severity levels
+- ✅ **Auto-Approval**: Automatically approves PRs when no issues are found
 
-```sh
-npx create-turbo@latest
+## Project Structure
+
+This is a Turborepo monorepo with the following packages:
+
+- `apps/web` - Next.js web application
+- `apps/docs` - Documentation site
+- `packages/ui` - Shared UI components
+- `packages/eslint-config` - Shared ESLint configuration
+- `packages/typescript-config` - Shared TypeScript configuration
+- `packages/code-review` - Core code review logic and GitHub Action
+
+## Setup
+
+### 1. Install Dependencies
+
+```bash
+npm install
 ```
 
-## What's inside?
+### 2. Configure GitHub Secrets
 
-This Turborepo includes the following packages/apps:
+In your GitHub repository, add the following secrets:
 
-### Apps and Packages
+- `WHAT_TV_CLAUDE_API_KEY`: Your Claude API key from Anthropic
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 3. Configure the Workflow
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+The GitHub Actions workflow is located at `.github/workflows/tv-code-review.yml`. You can customize:
 
-### Utilities
+1. **Claude Model**: Choose from available models:
+   - `claude-3-5-sonnet-20241022` (default)
+   - `claude-3-5-haiku-20241022`
+   - `claude-3-opus-20240229`
 
-This Turborepo has some additional tools already setup for you:
+2. **System Prompt**: Override the default system prompt for custom review criteria
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### 4. Enable the Workflow
 
-### Build
+The workflow will automatically trigger on:
+- Pull request events (opened, synchronize, reopened)
+- Comments containing "What TV?"
 
-To build all apps and packages, run the following command:
+## Usage
 
-```
-cd my-turborepo
+### Automatic Review
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+When you create or update a pull request, the TV code review system will automatically:
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+1. Analyze all changed files
+2. Identify potential issues (bugs, security, performance, code quality)
+3. Provide structured feedback
+4. Approve the PR if no significant issues are found
+5. Leave a review comment with "TV" signature
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+### Manual Review
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+Comment "What TV?" on any pull request to trigger a manual review.
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+### Example Review Output
 
-### Develop
+```markdown
+## 🤖 Code Review by TV
 
-To develop all apps and packages, run the following command:
+The code changes look good overall. The implementation follows TypeScript best practices and the logic is sound.
 
-```
-cd my-turborepo
+### Issues Found:
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+1. ❌ **src/utils/helper.ts** (Line 15)
+   Missing error handling for async operation
+   💡 Suggestion: Add try-catch block around the async call
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+2. ⚠️ **src/components/Button.tsx**
+   Consider using semantic HTML elements for better accessibility
+   💡 Suggestion: Add proper ARIA labels
+
+✅ **TV** - This pull request looks good to merge!
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## Development
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
+### Build the Project
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+```bash
+npm run build
 ```
 
-### Remote Caching
+### Run Development Server
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+```bash
+npm run dev
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### Lint Code
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+```bash
+npm run lint
 ```
 
-## Useful Links
+### Type Check
 
-Learn more about the power of Turborepo:
+```bash
+npm run check-types
+```
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## Configuration Options
+
+### Workflow Inputs
+
+You can customize the workflow behavior by modifying the workflow file or using workflow dispatch:
+
+```yaml
+with:
+  claude-api-key: ${{ secrets.WHAT_TV_CLAUDE_API_KEY }}
+  model: 'claude-3-5-sonnet-20241022'
+  system-prompt: |
+    You are a senior code reviewer focusing on security and performance.
+    Be strict about potential vulnerabilities and suggest optimizations.
+```
+
+### Custom System Prompt
+
+The default system prompt focuses on:
+- Bug detection
+- Security issues
+- Performance problems
+- Code quality and best practices
+- Architecture and design patterns
+
+You can override this with your own criteria by setting the `system-prompt` input.
+
+## Dependencies
+
+All dependencies use minor version pinning (e.g., `^1.2` instead of `^1.2.5`) for better stability.
+
+### Core Dependencies
+
+- `@anthropic-ai/sdk` - Claude API client
+- `@actions/core` - GitHub Actions toolkit
+- `@actions/github` - GitHub API integration
+- `@octokit/rest` - GitHub REST API client
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+5. Wait for TV to review your code! 🤖
+
+## License
+
+MIT License - see LICENSE file for details.
+
+## Support
+
+If you encounter any issues or have questions, please open an issue in the GitHub repository.
+
+---
+
+**TV** - Your AI code review assistant 🤖✨

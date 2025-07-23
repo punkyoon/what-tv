@@ -1,6 +1,10 @@
 {
   "name": "what-tv",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
@@ -9,12 +13,12 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.5",
-    "typescript": "5.8.3"
+    "prettier": "^3.6",
+    "turbo": "^2.5",
+    "typescript": "^5.8"
   },
-  "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "npm@11.4.2"
 }

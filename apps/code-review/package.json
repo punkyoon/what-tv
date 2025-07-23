@@ -1,0 +1,27 @@
+{
+  "name": "@what-tv/code-review",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32",
+    "@actions/core": "^1.10",
+    "@actions/github": "^6.0",
+    "@octokit/rest": "^21.0"
+  },
+  "devDependencies": {
+    "@what-tv/eslint-config": "*",
+    "@what-tv/typescript-config": "*",
+    "@types/node": "^22.15",
+    "eslint": "^9.31",
+    "typescript": "^5.8"
+  }
+}
