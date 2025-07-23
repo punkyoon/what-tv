@@ -21,7 +21,8 @@ coverage
 # Build Outputs
 out/
 build
-dist
+apps/*/dist
+packages/*/dist
 
 
 # Debug

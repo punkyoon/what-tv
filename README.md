@@ -1,75 +1,127 @@
-# What TV? - AI Code Review System
+# What TV? - AI Code Review Action
 
-A modern TypeScript project built with Turborepo that provides AI-powered code reviews using Claude API. The system automatically reviews pull requests and provides approval with the signature "TV" message.
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-What%20TV%3F-blue.svg?colorA=24292e&colorB=0366d6&style=flat&longCache=true&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAM6wAADOsB5dZE0gAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAERSURBVCiRhZG/SsMxFEZPfsVJ61jbxaF0cRQRcRJ9hlYn30IHN/+9iquDCOIsblIrOjqKgy5aKoJQj4n3EX8DyzAQ3ggHAd+hc/hRBkmRQRkSqg0pd7t+4e7u7g7u7u5qfYnoiAlTk+zx5xtP7+ct1gN3eWazHHhxOBHBHenTlU9acgUiez4fzrYFdDrGQjRwOiqUbwkRPADeAGsAiD1hBmBHRSRgZuNiccKRHTDkmKVVrQeUSQwrdQkfFZxHdCjG8SA0PVKZSUAAAABJRU5ErkJggg==)](https://github.com/marketplace/actions/what-tv-ai-code-review)
 
-## Features
+A powerful AI-powered code review GitHub Action that uses Claude API to automatically review pull requests and provide intelligent feedback with the signature "TV" approval.
 
-- 🤖 **AI-Powered Code Review**: Uses Claude API for intelligent code analysis
-- 🔄 **Automatic PR Review**: Triggers on pull request events
+## ✨ Features
+
+- 🤖 **AI-Powered Reviews**: Uses Anthropic's Claude API for intelligent code analysis
+- 🔄 **Automatic PR Review**: Triggers on pull request events automatically
 - 💬 **Manual Trigger**: Comment "What TV?" on any PR to trigger a review
 - ⚙️ **Configurable**: Customizable Claude model and system prompts
 - 📝 **Detailed Feedback**: Provides structured feedback with severity levels
 - ✅ **Auto-Approval**: Automatically approves PRs when no issues are found
+- 🎯 **Smart Analysis**: Focuses on bugs, security, performance, and code quality
 
-## Project Structure
+## 🚀 Quick Start
 
-This is a Turborepo monorepo with the following packages:
+### 1. Add to Your Workflow
 
-- `apps/web` - Next.js web application
-- `apps/docs` - Documentation site
-- `packages/ui` - Shared UI components
-- `packages/eslint-config` - Shared ESLint configuration
-- `packages/typescript-config` - Shared TypeScript configuration
-- `packages/code-review` - Core code review logic and GitHub Action
+Create `.github/workflows/code-review.yml` in your repository:
 
-## Setup
+```yaml
+name: AI Code Review
 
-### 1. Install Dependencies
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
 
-```bash
-npm install
+jobs:
+  code-review:
+    if: github.event_name == 'pull_request' || (github.event_name == 'issue_comment' && contains(github.event.comment.body, 'What TV?'))
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Review PR
+        uses: "punkyoon/what-tv@v0.0.1"
+        with:
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+          model: claude-3-5-sonnet-20241022
+          system-prompt: |
+            You are a senior code reviewer. Focus on:
+            - Security vulnerabilities
+            - Performance issues
+            - Code quality and best practices
+            - Potential bugs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### 2. Configure GitHub Secrets
+### 2. Configure Secrets
 
-In your GitHub repository, add the following secrets:
+In your GitHub repository settings, add these secrets:
 
-- `WHAT_TV_CLAUDE_API_KEY`: Your Claude API key from Anthropic
+- `CLAUDE_API_KEY`: Your Claude API key from [Anthropic Console](https://console.anthropic.com/)
+- `GITHUB_TOKEN`: Automatically provided by GitHub Actions
 
-### 3. Configure the Workflow
+### 3. That's it! 🎉
 
-The GitHub Actions workflow is located at `.github/workflows/tv-code-review.yml`. You can customize:
+Your AI code reviewer is now active and will:
+- Automatically review new pull requests
+- Respond to "What TV?" comments with manual reviews
+- Provide detailed feedback and approve when appropriate
 
-1. **Claude Model**: Choose from available models:
-   - `claude-3-5-sonnet-20241022` (default)
-   - `claude-3-5-haiku-20241022`
-   - `claude-3-opus-20240229`
+## 📋 Inputs
 
-2. **System Prompt**: Override the default system prompt for custom review criteria
+| Input | Description | Required | Default |
+|-------|-------------|----------|---------|
+| `claude-api-key` | Claude API key for authentication | ✅ Yes | - |
+| `model` | Claude model to use | ❌ No | `claude-3-5-sonnet-20241022` |
+| `system-prompt` | Custom system prompt for reviews | ❌ No | Built-in prompt |
 
-### 4. Enable the Workflow
+## 📤 Outputs
 
-The workflow will automatically trigger on:
-- Pull request events (opened, synchronize, reopened)
-- Comments containing "What TV?"
+| Output | Description |
+|--------|-------------|
+| `approved` | Whether the pull request was approved |
+| `issues_count` | Number of issues found |
+| `summary` | Summary of the code review |
 
-## Usage
+## 🎛️ Available Models
 
-### Automatic Review
+- `claude-3-5-sonnet-20241022` (default) - Best balance of speed and quality
+- `claude-3-5-haiku-20241022` - Fastest, good for simple reviews
+- `claude-3-opus-20240229` - Most thorough, slower but highest quality
 
-When you create or update a pull request, the TV code review system will automatically:
+## 🔧 Advanced Configuration
 
-1. Analyze all changed files
-2. Identify potential issues (bugs, security, performance, code quality)
-3. Provide structured feedback
-4. Approve the PR if no significant issues are found
-5. Leave a review comment with "TV" signature
+### Custom System Prompt
 
-### Manual Review
+```yaml
+- name: Review PR
+  uses: "punkyoon/what-tv@v0.0.1"
+  with:
+    claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+    model: claude-3-5-sonnet-20241022
+    system-prompt: |
+      You are a security-focused code reviewer. Prioritize:
+      1. Security vulnerabilities (SQL injection, XSS, etc.)
+      2. Authentication and authorization issues
+      3. Data validation problems
+      4. Cryptographic implementations
+      Be strict about security but constructive in feedback.
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
 
-Comment "What TV?" on any pull request to trigger a manual review.
+### Multiple Triggers
 
-### Example Review Output
+```yaml
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+  workflow_dispatch: # Manual trigger
+```
+
+## 📝 Example Review Output
 
 ```markdown
 ## 🤖 Code Review by TV
@@ -86,73 +138,27 @@ The code changes look good overall. The implementation follows TypeScript best p
    Consider using semantic HTML elements for better accessibility
    💡 Suggestion: Add proper ARIA labels
 
-✅ **TV** - This pull request looks good to merge!
+### Summary:
+- 2 issues found (1 error, 1 warning)
+- Focus areas: Error handling, Accessibility
+- Overall code quality: Good
+
+✅ **TV** - This pull request looks good to merge after addressing the error handling issue!
 ```
 
-## Development
+## 🛠️ Development
 
-### Build the Project
+This action is built with:
+- TypeScript
+- Node.js 20
+- Anthropic Claude API
+- GitHub Actions Toolkit
 
-```bash
-npm run build
-```
+## 📄 License
 
-### Run Development Server
+MIT License - see [LICENSE](LICENSE) file for details.
 
-```bash
-npm run dev
-```
-
-### Lint Code
-
-```bash
-npm run lint
-```
-
-### Type Check
-
-```bash
-npm run check-types
-```
-
-## Configuration Options
-
-### Workflow Inputs
-
-You can customize the workflow behavior by modifying the workflow file or using workflow dispatch:
-
-```yaml
-with:
-  claude-api-key: ${{ secrets.WHAT_TV_CLAUDE_API_KEY }}
-  model: 'claude-3-5-sonnet-20241022'
-  system-prompt: |
-    You are a senior code reviewer focusing on security and performance.
-    Be strict about potential vulnerabilities and suggest optimizations.
-```
-
-### Custom System Prompt
-
-The default system prompt focuses on:
-- Bug detection
-- Security issues
-- Performance problems
-- Code quality and best practices
-- Architecture and design patterns
-
-You can override this with your own criteria by setting the `system-prompt` input.
-
-## Dependencies
-
-All dependencies use minor version pinning (e.g., `^1.2` instead of `^1.2.5`) for better stability.
-
-### Core Dependencies
-
-- `@anthropic-ai/sdk` - Claude API client
-- `@actions/core` - GitHub Actions toolkit
-- `@actions/github` - GitHub API integration
-- `@octokit/rest` - GitHub REST API client
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -160,14 +166,24 @@ All dependencies use minor version pinning (e.g., `^1.2` instead of `^1.2.5`) fo
 4. Submit a pull request
 5. Wait for TV to review your code! 🤖
 
-## License
+## 💡 Tips
 
-MIT License - see LICENSE file for details.
+- **API Costs**: Claude API usage is pay-per-use. Monitor your usage in the Anthropic Console
+- **Rate Limits**: The action respects Claude API rate limits automatically
+- **Large PRs**: For very large PRs, consider using `claude-3-5-haiku-20241022` for faster reviews
+- **Custom Prompts**: Tailor the system prompt to your team's coding standards and priorities
 
-## Support
+## 🆘 Support
 
-If you encounter any issues or have questions, please open an issue in the GitHub repository.
+If you encounter issues:
+
+1. Check the [GitHub Issues](https://github.com/punkyoon/what-tv/issues)
+2. Verify your Claude API key is valid
+3. Ensure `GITHUB_TOKEN` has proper permissions
+4. Review the action logs for detailed error messages
 
 ---
 
 **TV** - Your AI code review assistant 🤖✨
+
+*Made with ❤️ for better code quality*

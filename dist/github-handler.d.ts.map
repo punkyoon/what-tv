@@ -1,0 +1,1 @@
+{"version":3,"file":"github-handler.d.ts","sourceRoot":"","sources":["../src/github-handler.ts"],"names":[],"mappings":"AAGA,OAAO,EAAE,gBAAgB,EAAkC,MAAM,SAAS,CAAC;AAE3E,qBAAa,aAAa;IACxB,OAAO,CAAC,OAAO,CAAuC;IACtD,OAAO,CAAC,YAAY,CAAe;gBAEvB,MAAM,EAAE,gBAAgB;IAU9B,iBAAiB,IAAI,OAAO,CAAC,IAAI,CAAC;IAyFlC,aAAa,IAAI,OAAO,CAAC,IAAI,CAAC;CAuErC"}
