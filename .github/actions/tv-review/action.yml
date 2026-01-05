@@ -1,0 +1,22 @@
+name: 'TV PR Review'
+description: 'Review PR with TV-themed comments and images'
+author: 'what-tv'
+
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  comment-body:
+    description: 'The comment body that triggered the action'
+    required: true
+  pr-number:
+    description: 'The PR number to review'
+    required: true
+  default-tv:
+    description: 'Default TV brand name (samsung, lg, sony, panasonic)'
+    required: false
+    default: 'samsung'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
