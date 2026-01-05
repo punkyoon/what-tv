@@ -70,7 +70,7 @@ npm install
 
 ### Build
 
-소스 코드 수정 후 반드시 빌드하여 `dist/index.js`를 업데이트해야 합니다:
+After modifying the source code, you must build to update `dist/index.js`:
 
 ```bash
 npm run build
@@ -87,28 +87,28 @@ npm run typecheck
 ```
 .github/actions/tv-review/
 ├── src/
-│   └── index.ts      # 메인 소스 코드
+│   └── index.ts      # Main source code
 ├── dist/
-│   └── index.js      # 빌드된 번들 (커밋 필요)
-├── action.yml        # Action 정의
+│   └── index.js      # Bundled output (must be committed)
+├── action.yml        # Action definition
 ├── package.json
 └── tsconfig.json
 ```
 
 ## Release
 
-### 1. 코드 수정
+### 1. Modify Code
 
-`src/index.ts`에서 필요한 수정을 진행합니다.
+Make your changes in `src/index.ts`.
 
-### 2. 빌드
+### 2. Build
 
 ```bash
 cd .github/actions/tv-review
 npm run build
 ```
 
-### 3. 커밋 및 푸시
+### 3. Commit and Push
 
 ```bash
 git add .
@@ -116,9 +116,9 @@ git commit -m "feat: update tv-review action"
 git push
 ```
 
-### TV 이미지 URL 변경
+### Changing TV Image URLs
 
-`src/index.ts`의 `TV_IMAGES` 객체에서 이미지 URL을 수정합니다:
+Update the image URLs in the `TV_IMAGES` object in `src/index.ts`:
 
 ```typescript
 const TV_IMAGES: Record<TVBrand, string> = {
@@ -129,4 +129,4 @@ const TV_IMAGES: Record<TVBrand, string> = {
 };
 ```
 
-수정 후 `npm run build`를 실행하고 `dist/index.js`를 커밋하세요.
+After modifying, run `npm run build` and commit `dist/index.js`.
