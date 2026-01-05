@@ -23,6 +23,9 @@ out/
 build
 dist
 
+# But include GitHub Actions dist
+!.github/actions/**/dist
+
 
 # Debug
 npm-debug.log*
